@@ -1,6 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron/main')
 const path = require('node:path')
 
+const handleCallAPI = async () => {
+    const res = await fetch('https://dummyjson.com/carts');
+    const data = await res.json();
+    return JSON.stringify(data);
+}
+
 function createWindow () {
   const mainWindow = new BrowserWindow({
     webPreferences: {
@@ -13,6 +19,8 @@ function createWindow () {
     const win = BrowserWindow.fromWebContents(webContents)
     win.setTitle(title)
   })
+
+    ipcMain.handle('call-api', handleCallAPI)
 
   mainWindow.loadFile('index.html')
 }
