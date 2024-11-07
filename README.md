@@ -1,5 +1,4 @@
 # Desktop-APP
-Electron.js
 
 ## Steps to create Electron.js App
 - go to [official side](https://www.electronjs.org/) to electron.js
@@ -145,3 +144,36 @@ npm start
 
 - After following the above steps, you should have a fully functional Electron application that looks like this:
 ![Electron.img](https://www.electronjs.org/assets/images/simplest-electron-app-849f2d68df0c27475bfb850ed5d171a6.png)
+
+### Key Fundamentals
+1. Main Process:
+- [official-docs](https://www.electronjs.org/docs/latest/tutorial/process-model) 
+    - **Role**: Acts like the "brain" of your Electron app.
+
+    - **Responsibilities**: Controls the application lifecycle, handles system events, and creates/manages browser windows.
+
+    - **Example**: In main.js, the Main Process creates the window and handles app events like when the app is ready or all windows are closed.
+
+2. Renderer Process:
+- [official-docs](https://www.electronjs.org/docs/latest/tutorial/process-model#the-renderer-process)
+    - **Role**: Runs the web pages (like index.html) inside each window.
+
+    - **Responsibilities**: Manages the web content, handles user interactions, and updates the UI.
+
+    - **Example**: Each browser window created by the Main Process runs in its own Renderer Process. It’s like a mini-browser.
+
+3. IPC (Inter-Process Communication):
+- [official-docs](https://www.electronjs.org/docs/latest/tutorial/ipc)
+    - **Role**: Allows the Main Process and Renderer Process to talk to each other.
+
+    - **Responsibilities**: Sends and receives messages between processes to coordinate tasks and share data.
+
+    - **Example**: If you want to save a file (a task best handled by the Main Process), the Renderer Process would send an IPC message to the Main Process to perform that action.
+
+4. Preload Script:
+- [official-docs](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts)
+    - **Role**: Runs before the Renderer Process loads any web content.
+
+    - **Responsibilities**: Exposes limited, safe Node.js features to the web page, enhancing security.
+
+    - **Example**: In preload.js, you can safely provide Node.js functionalities to your web content, like showing version numbers without giving full access to Node.js.
