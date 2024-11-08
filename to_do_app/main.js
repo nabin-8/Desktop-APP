@@ -18,9 +18,21 @@ const handleCallAPI = async () => {
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
+  })
+
+  ipcMain.on('fetch-notes', (event) => {
+    const db = new sqlite3.Database('db/notes.db');
+    
+    db.all("SELECT * FROM notes", (err, rows) => {
+        mainWindow.webContents.send('read-notes-ui', rows);
+    });
+    
+    db.close();
   })
 
   ipcMain.on('set-title', (event, title) => {
@@ -29,7 +41,17 @@ function createWindow () {
     win.setTitle(title)
   })
 
-    ipcMain.handle('call-api', handleCallAPI)
+  ipcMain.on('create-notes', (event, title, description) => {
+    const db = new sqlite3.Database('db/notes.db');
+    db.serialize(() => {
+        const stmt = db.prepare("INSERT INTO notes (title, description) VALUES (?, ?)");
+        stmt.run(title, description);
+        stmt.finalize();
+    });
+    db.close();
+  });
+ 
+  ipcMain.handle('call-api', handleCallAPI)
 
   mainWindow.loadFile('index.html')
 }
