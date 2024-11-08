@@ -27,7 +27,7 @@ npm init
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nabin-8/Desktop-APP.git"
+    ttps://github.com/nabin-8/Desktop-APP.git"
   },
   "keywords": [
     "electron",

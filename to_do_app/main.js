@@ -1,6 +1,15 @@
 const { app, BrowserWindow, ipcMain } = require('electron/main')
 const path = require('node:path')
+const sqlite3 = require('sqlite3').verbose();
 
+function runMigration() {
+    const db = new sqlite3.Database('db/notes.db');
+
+    db.serialize(() => {
+        db.run("CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT)")
+    });
+    db.close();
+}
 const handleCallAPI = async () => {
     const res = await fetch('https://dummyjson.com/carts');
     const data = await res.json();
@@ -26,7 +35,8 @@ function createWindow () {
 }
 
 app.whenReady().then(() => {
-  createWindow()
+    runMigration()
+    createWindow()
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -36,3 +46,6 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
+
+
+

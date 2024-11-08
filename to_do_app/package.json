@@ -24,5 +24,8 @@
   "homepage": "https://github.com/nabin-8/Desktop-APP#readme",
   "devDependencies": {
     "electron": "^33.1.0"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.7"
   }
 }
